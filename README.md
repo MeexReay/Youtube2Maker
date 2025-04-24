@@ -42,7 +42,7 @@ sudo dd if=build/youtube2.iso of=/dev/sdX bs=4M status=progress oflag=sync
   "video-file": "<video-id>.mp4",
   "image-file": "<video-id>.png",
   "channel-name": "Название канала",
-  "channel-avatar-file": "<channel-id>.png",
+  "channel-avatar-file": "<channel-id>.png"
 }
 ```
 
