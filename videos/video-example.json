@@ -1,8 +1,9 @@
 {
+  "id": "video-example",
   "name": "Название видео",
   "description": "Описание видео",
-  "video-file": "<video-id>.mp4",
-  "image-file": "<video-id>.png",
+  "video-file": "video-example.mp4",
+  "image-file": "video-example.png",
   "channel-name": "Название канала",
-  "channel-avatar-file": "<channel-id>.png"
+  "channel-avatar-file": "video-example.png"
 }

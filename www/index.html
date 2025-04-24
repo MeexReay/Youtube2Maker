@@ -3,9 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
   <title>Youtube 2</title>
 </head>
 <body>
-  
+  <header>
+      <div class="logo" onclick="document.location.assign('index.html')">YouTube 2</div>
+      <div class="search-bar">
+          <input type="text" placeholder="Поиск" id="search">
+      </div>
+  </header>
+
+  <div class="video-grid" id="video-grid"></div>
+
+  <footer>
+      <p>&copy; 2025 YouTube 2, Inc. Не для коммерческого использования.</p>
+  </footer> 
+
+  <script src="videos.js"></script>
+
+  <script>
+    const search = document.getElementById("search")
+
+    search.onkeydown = (e) => {
+      if (e.key == "Enter") {
+        document.location.assign("search.html?q="+search.value)
+      }
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function renderVideos() {
+      const videoGrid = document.getElementById('video-grid');
+      
+      let local_videos = videos
+      shuffleArray(local_videos)
+
+      local_videos.slice(0, 20).forEach(video => {
+        const videoCard = document.createElement('div');
+        videoCard.classList.add('video-card');
+        
+        videoCard.innerHTML = `
+          <img src="${video['image-file']}" alt="${video['name']}">
+          <div class="video-info">
+            <h3>${video['name']}</h3>
+            <div class="channel-info">
+              <img src="${video['channel-avatar-file']}" alt="${video['channel-name']}">
+              <span>${video['channel-name']}</span>
+            </div>
+          </div>
+        `;
+
+        videoCard.onclick = () => {
+          document.location.assign("watch.html?v="+video['id'])
+        }
+        
+        videoGrid.appendChild(videoCard);
+      });
+    }
+
+    renderVideos()
+  </script>
 </body>
 </html>

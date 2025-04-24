@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="search.css">
+  <title>Результаты поиска</title>
+</head>
+<body>
+  <header>
+      <div class="logo" onclick="document.location.assign('index.html')">YouTube 2</div>
+      <div class="search-bar">
+          <input type="text" placeholder="Поиск" id="search">
+      </div>
+  </header>
+
+  <div class="results-container" id="results">
+  </div>
+
+  <footer>
+      <p>&copy; 2025 YouTube 2, Inc. Не для коммерческого использования.</p>
+  </footer> 
+
+  <script src="videos.js"></script>
+
+  <script>
+    const search = document.getElementById("search")
+
+    search.onkeydown = (e) => {
+      if (e.key == "Enter") {
+        document.location.assign("search.html?q="+search.value)
+      }
+    }
+
+    function getSearchQuery() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("q")?.toLowerCase() || "";
+    }
+
+    function renderSearchResults(query) {
+      const container = document.getElementById('results');
+      container.innerHTML = "";
+
+      const results = videos.filter(video =>
+        video.name.toLowerCase().includes(query) ||
+        video.description.toLowerCase().includes(query)
+      );
+
+      if (results.length === 0) {
+        container.innerHTML = `<p style="color:#ccc; font-size:18px;">Ничего не найдено по запросу "<strong>${query}</strong>".</p>`;
+        document.title = `Поиск: ${query}`;
+        return;
+      }
+
+      document.title = `Поиск: ${query}`;
+
+      results.forEach(video => {
+        const card = document.createElement('div');
+        card.classList.add('video-card');
+
+        card.innerHTML = `
+          <img src="${video['image-file']}" class="thumbnail" alt="${video['name']}">
+          <div class="video-meta">
+            <h3>${video['name']}</h3>
+            <div class="channel-row">
+              <img src="${video['channel-avatar-file']}" alt="${video['channel-name']}" class="channel-avatar">
+              <span class="channel-name">${video['channel-name']}</span>
+            </div>
+            <div class="description">${video['description']}</div>
+          </div>
+        `;
+
+        card.onclick = () => {
+          window.location.href = `watch.html?v=${video.id}`;
+        };
+
+        container.appendChild(card);
+      });
+    }
+
+    const query = getSearchQuery();
+    renderSearchResults(query);
+  </script>
+</body>
+</html>

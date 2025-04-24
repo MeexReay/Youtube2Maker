@@ -37,6 +37,7 @@ sudo dd if=build/youtube2.iso of=/dev/sdX bs=4M status=progress oflag=sync
 1. Добавьте json файл `<video-id>.json` в папку `videos/`:
 ```json
 {
+  "id": "<video-id>",
   "name": "Название видео",
   "description": "Описание видео",
   "video-file": "<video-id>.mp4",

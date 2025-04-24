@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="watch.css">
+  <title>Просмотр видео</title>
+</head>
+<body>
+  <header>
+      <div class="logo" onclick="document.location.assign('index.html')">YouTube 2</div>
+      <div class="search-bar">
+          <input type="text" placeholder="Поиск" id="search">
+      </div>
+  </header>
+
+  <div class="container">
+    <div class="main-video">
+        <video controls src="<url>" poster="<image-url>"></video>
+        <div class="video-details">
+            <h1>Название видео</h1>
+            <div class="channel-info">
+                <img src="<channel-avatar-file>" alt="Канал">
+                <span>Название канала</span>
+            </div>
+            <div class="description">
+                Описание видео: Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                Donec placerat, metus in commodo varius, libero justo tristique sem.
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+    </div>
+  </div>
+
+  <footer>
+      <p>&copy; 2025 YouTube 2, Inc. Не для коммерческого использования.</p>
+  </footer> 
+
+  <script src="videos.js"></script>
+
+  <script>
+    const search = document.getElementById("search")
+
+    search.onkeydown = (e) => {
+      if (e.key == "Enter") {
+        document.location.assign("search.html?q="+search.value)
+      }
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function getVideoIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("v");
+    }
+
+    function renderMainVideo(video) {
+        const videoElement = document.querySelector(".main-video video");
+        const titleElement = document.querySelector(".video-details h1");
+        const avatarElement = document.querySelector(".channel-info img");
+        const channelNameElement = document.querySelector(".channel-info span");
+        const descriptionElement = document.querySelector(".description");
+
+        videoElement.src = video["video-file"];
+        videoElement.poster = video["image-file"];
+        titleElement.textContent = video["name"];
+        avatarElement.src = video["channel-avatar-file"];
+        channelNameElement.textContent = video["channel-name"];
+        descriptionElement.textContent = video["description"];
+        document.title = video["name"];
+    }
+
+    function renderSidebar(videosList, currentId) {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.innerHTML = "";
+        shuffleArray(videosList);
+
+        videosList
+            .filter(video => video.id !== currentId)
+            .slice(0, 20)
+            .forEach(video => {
+                const card = document.createElement('div');
+                card.classList.add('video-card');
+
+                card.innerHTML = `
+                    <img src="${video['image-file']}" alt="${video['name']}" class="thumbnail">
+                    <div class="video-meta">
+                        <h3>${video['name']}</h3>
+                        <div class="channel-row">
+                            <img src="${video['channel-avatar-file']}" alt="${video['channel-name']}" class="channel-avatar">
+                            <span>${video['channel-name']}</span>
+                        </div>
+                    </div>
+                `;
+
+                card.onclick = () => {
+                    window.location.href = `watch.html?v=${video.id}`;
+                };
+
+                sidebar.appendChild(card);
+            });
+    }
+
+    const currentVideoId = getVideoIdFromUrl();
+    const mainVideo = videos.find(v => v.id === currentVideoId);
+
+    if (mainVideo) {
+        renderMainVideo(mainVideo);
+        renderSidebar(videos, mainVideo.id);
+    } else {
+        document.querySelector(".main-video").innerHTML = `<p style="color: white;">Видео не найдено.</p>`;
+        document.title = "Видео не найдено";
+    }
+  </script>
+</body>
+</html>
