@@ -9,7 +9,7 @@
 2. Соберите сайт через `./build.sh`
 3. Запишите сайт на флешку через dd (замените sdX на тот что из lsblk):
 ```bash
-sudo dd if=build/youtube2.iso of=/dev/sdX bs=4M status=progress oflag=sync
+sudo dd if=build/youtube2.iso of=/dev/sdX bs=4M status=progress
 ```
 
 ## Добавление видео

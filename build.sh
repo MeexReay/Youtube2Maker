@@ -1,6 +1,5 @@
 #!/bin/bash
 
-rm -rf build/iso
 rm -rf build
 mkdir build
 cp -r root build/iso
@@ -14,4 +13,4 @@ for i in build/iso/www/videos/*.json; do
 done
 echo "]" >> build/iso/www/videos.js
 rm build/iso/www/videos/*.json
-mkisofs -o build/youtube2.iso -V "Youtube2" -J -r build/iso
+mkisofs -r -J -o build/youtube2.iso -V "Youtube2" build/iso
