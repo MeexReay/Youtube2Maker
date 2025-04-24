@@ -8,7 +8,9 @@ fi
 PLAYLIST_URL=$1
 shift
 
-VIDEO_URLS=$(yt-dlp --flat-playlist -i --print url "$PLAYLIST_URL")
+VIDEO_URLS=$(yt-dlp --flat-playlist --print webpage_url "$PLAYLIST_URL")
+
+echo "$VIDEO_URLS" | wc -l
 
 for VIDEO_URL in $VIDEO_URLS; do
     echo "Загружаем видео: $VIDEO_URL"
