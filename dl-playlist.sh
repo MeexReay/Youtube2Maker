@@ -12,7 +12,7 @@ VIDEO_URLS=$(yt-dlp --flat-playlist -i --print url "$PLAYLIST_URL")
 
 for VIDEO_URL in $VIDEO_URLS; do
     echo "Загружаем видео: $VIDEO_URL"
-    ./dl-video "$VIDEO_URL" "$@"
+    ./dl-video.sh "$VIDEO_URL" "$@"
 done
 
 echo "Плейлист успешно скачан"
