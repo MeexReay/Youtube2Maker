@@ -75,6 +75,10 @@
         channelNameElement.textContent = video["channel-name"];
         descriptionElement.textContent = video["description"];
         document.title = video["name"];
+
+        document.getElementsByClassName("channel-info")[0].onclick = () => {
+          document.location.assign("search.html?q="+video["channel-name"])
+        }
     }
 
     function renderSidebar(videosList, currentId) {

@@ -41,12 +41,26 @@
       const container = document.getElementById('results');
       container.innerHTML = "";
 
-      const results = videos.filter(video =>
-        video.name.toLowerCase().includes(query) ||
-        video.description.toLowerCase().includes(query)
-      );
+      if (!query.trim()) {
+        container.innerHTML = `<p style="color:#ccc; font-size:18px;">Введите поисковый запрос.</p>`;
+        document.title = `Поиск`;
+        return;
+      }
 
-      if (results.length === 0) {
+      const words = query.toLowerCase().split(/\s+/);
+
+      const scoredVideos = videos.map(video => {
+        const text = `${video.name} ${video.description} ${video['channel-name']}`.toLowerCase();
+        let score = 0;
+        for (const word of words) {
+          if (text.includes(word)) score++;
+        }
+        return { video, score };
+      }).filter(entry => entry.score > 0);
+
+      scoredVideos.sort((a, b) => b.score - a.score);
+
+      if (scoredVideos.length === 0) {
         container.innerHTML = `<p style="color:#ccc; font-size:18px;">Ничего не найдено по запросу "<strong>${query}</strong>".</p>`;
         document.title = `Поиск: ${query}`;
         return;
@@ -54,7 +68,7 @@
 
       document.title = `Поиск: ${query}`;
 
-      results.forEach(video => {
+      scoredVideos.forEach(({ video }) => {
         const card = document.createElement('div');
         card.classList.add('video-card');
 
@@ -79,6 +93,7 @@
     }
 
     const query = getSearchQuery();
+    search.value = new URLSearchParams(window.location.search).get("q")
     renderSearchResults(query);
   </script>
 </body>

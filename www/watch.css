@@ -21,6 +21,11 @@ header .logo {
   font-weight: bold;
 }
 
+.channel-info {
+  cursor: pointer;
+  width: max-content;
+}
+
 header .search-bar input {
   background-color: #303030;
   border: 1px solid #3a3a3a;
