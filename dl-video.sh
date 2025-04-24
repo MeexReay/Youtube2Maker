@@ -19,6 +19,14 @@ PREVIEW_FILENAME=$(find videos -type f -iname "${VIDEO_ID}_preview*")
 yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "videos/${VIDEO_ID}_video" "$VIDEO_URL" $ADDITIONAL_ARGS
 VIDEO_FILENAME=$(find videos -type f -iname "${VIDEO_ID}_video*")
 
+# ffmpeg -i "$VIDEO_FILENAME" \
+#   -vf "scale='min(1920,iw)':'min(1080,ih)':force_original_aspect_ratio=decrease" \
+#   -c:v libx264 -preset slow -crf 23 \
+#   -c:a copy \
+#   "videos/${VIDEO_ID}_video_compressed.mp4"
+
+# mv "videos/${VIDEO_ID}_video_compressed.mp4" "$VIDEO_FILENAME"
+
 NAME=$(jq -r '.fulltitle' "videos/${VIDEO_ID}.info.json")
 DESCRIPTION=$(jq -r '.description' "videos/${VIDEO_ID}.info.json")
 CHANNEL_NAME=$(jq -r '.uploader' "videos/${VIDEO_ID}.info.json")
