@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Run Youtube2
+Type=Application
+Exec=xdg-open ./www/index.html
+Icon=html
+Terminal=false
