@@ -2,9 +2,9 @@
 
 rm -rf build
 mkdir build
-cp -r root build/iso
-cp -r www build/iso/www
-cp -r videos build/iso/www/videos
+cp -lR root build/iso
+cp -lR www build/iso/www
+cp -lR videos build/iso/www/videos
 rm build/iso/www/videos/video-example.json
 echo "const videos = [" > build/iso/www/videos.js
 for i in build/iso/www/videos/*.json; do
