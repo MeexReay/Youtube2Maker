@@ -7,7 +7,7 @@ fi
 
 VIDEO_URL=$1
 shift
-ADDITIONAL_ARGS="$@" 
+ADDITIONAL_ARGS="$@"
 
 VIDEO_ID=$(echo -n "$VIDEO_URL" | md5sum | awk '{print $1}')
 
@@ -22,8 +22,8 @@ yt-dlp --skip-download --write-thumbnail -o "videos/${VIDEO_ID}_preview" "$VIDEO
 PREVIEW_FILENAME=$(find videos -type f -iname "${VIDEO_ID}_preview*")
 yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "videos/${VIDEO_ID}_video" "$VIDEO_URL" $ADDITIONAL_ARGS
 VIDEO_FILENAME=$(find videos -type f -iname "${VIDEO_ID}_video*")
-    
-ffmpeg -i $VIDEO_FILENAME -c:v libsvtav1 -crf 15 -preset 4 -c:a copy "videos/${VIDEO_ID}.mkv"
+
+ffmpeg -i $VIDEO_FILENAME -c:v libsvtav1 -c:a copy "videos/${VIDEO_ID}_video.mkv"
 
 # ffmpeg -i "$VIDEO_FILENAME" \
 #   -vf "scale='min(1920,iw)':'min(1080,ih)':force_original_aspect_ratio=decrease" \

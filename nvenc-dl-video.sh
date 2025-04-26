@@ -1,27 +1,32 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-    echo "Ошибка: укажите ссылку на видео."
-    exit 1
+  echo "Ошибка: укажите ссылку на видео."
+  exit 1
 fi
 
 VIDEO_URL=$1
 shift
-ADDITIONAL_ARGS="$@" 
+ADDITIONAL_ARGS="$@"
 
 VIDEO_ID=$(echo -n "$VIDEO_URL" | md5sum | awk '{print $1}')
+
+mkdir -p "videos"
 
 if [ -f "videos/${VIDEO_ID}.json" ]; then
   exit 0
 fi
-
-mkdir -p "videos"
 
 yt-dlp --skip-download --write-info-json -o "videos/${VIDEO_ID}" "$VIDEO_URL" $ADDITIONAL_ARGS
 yt-dlp --skip-download --write-thumbnail -o "videos/${VIDEO_ID}_preview" "$VIDEO_URL" $ADDITIONAL_ARGS
 PREVIEW_FILENAME=$(find videos -type f -iname "${VIDEO_ID}_preview*")
 yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "videos/${VIDEO_ID}_video" "$VIDEO_URL" $ADDITIONAL_ARGS
 VIDEO_FILENAME=$(find videos -type f -iname "${VIDEO_ID}_video*")
+mv $VIDEO_FILENAME "videos/${VIDEO_ID}_video.mp4"
+VIDEO_FILENAME="videos/${VIDEO_ID}_video.mp4"
+
+ffmpeg -i videos/${VIDEO_ID}_video.mp4 -c:v hevc_nvenc -tune ll -crf 26 -preset p7 videos/${VIDEO_ID}_video_compressed.mp4
+VIDEO_FILENAME="videos/${VIDEO_ID}_video_compressed.mp4"
 
 # ffmpeg -i "$VIDEO_FILENAME" \
 #   -vf "scale='min(1920,iw)':'min(1080,ih)':force_original_aspect_ratio=decrease" \
@@ -29,8 +34,6 @@ VIDEO_FILENAME=$(find videos -type f -iname "${VIDEO_ID}_video*")
 #   -c:a copy \
 #   "videos/${VIDEO_ID}_video_compressed.mp4"
 
-mv $VIDEO_FILENAME "videos/${VIDEO_ID}_video.mp4"
-VIDEO_FILENAME="videos/${VIDEO_ID}_video.mp4"
 
 NAME=$(jq -r '.fulltitle' "videos/${VIDEO_ID}.info.json")
 DESCRIPTION=$(jq -r '.description' "videos/${VIDEO_ID}.info.json")

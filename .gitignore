@@ -1,3 +1,4 @@
 /build
 /videos/*
 !/videos/video-example.json
+/test

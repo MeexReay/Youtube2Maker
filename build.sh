@@ -13,4 +13,4 @@ for i in build/iso/www/videos/*.json; do
 done
 echo "]" >> build/iso/www/videos.js
 rm build/iso/www/videos/*.json
-mkisofs -r -J -o build/youtube2.iso -V "Youtube2" build/iso
+mkisofs -iso-level 3 -r -J -o build/youtube2.iso -V "Youtube2" build/iso
